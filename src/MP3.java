@@ -122,6 +122,28 @@ public class MP3 {
         }
     }
 
+    public static boolean isValidInfixExpression(String expression) {
+        Stack stack = new Stack(100);
+
+        for (char c : expression.toCharArray()) {
+            if (c == '(' || c == '{' || c == '[') {
+                stack.push(Character.toString(c));
+            } else if (c == ')' || c == '}' || c == ']') {
+                if (stack.isEmpty() || !isMatchingPair(stack.pop().charAt(0), c)) {
+                    return false; // Mismatched parentheses
+                }
+            }
+        }
+
+        return stack.isEmpty(); // Expression is valid if the stack is empty at the end
+    }
+
+    private static boolean isMatchingPair(char opening, char closing) {
+        return (opening == '(' && closing == ')') ||
+                (opening == '{' && closing == '}') ||
+                (opening == '[' && closing == ']');
+    }
+
     public static String getResult(String expression){
         return "";
     }
