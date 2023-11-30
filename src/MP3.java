@@ -31,153 +31,149 @@ import java.util.Scanner;
 public class MP3 {
 
     static Scanner input = new Scanner(System.in);
+    static Stack postfix;
 
     private static int precedence(String c) {
-        return switch (c) {
-            case "+", "-" -> 1;
-            case "*", "/" -> 2;
-            case "^" -> 3;
-            default -> -1;
-        };
+        switch (c) {
+            case "+": return 1;
+            case "-": return 1;
+            case "*": return 2;
+            case "/": return 2;
+            case "^": return 3;
+            default: return -1;
+        }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
-        Stack stack = new Stack(10);
-        choose(stack);
+        choose();
     }
 
-    static void choose(Stack stack) throws NumberFormatException {
+    static void choose() throws Exception {
         loop:
         while(true){
-            System.out.println("Choose an operation");
-            System.out.println("1. Push");
-            System.out.println("2. Pop");
-            System.out.println("3. Top");
-            System.out.println("4. Peek");
-            System.out.println("5. Is Empty?");
-            System.out.println("6. Is Full?");
-            System.out.println("7. Convert to PostFix");
-            System.out.println("8. Exit Program");
-            System.out.println();
+            System.out.print("Enter your infix expression: ");
+            String infixExpression = input.nextLine();
+            infixExpression = infixExpression.replaceAll("\\s", "");
 
-            System.out.print("Input: ");
-            int choose = 0;
-            try{
-                choose = intInput();
-            }catch(Exception e){
-                System.out.println(e.getMessage());
-            }
-            switch(choose){
-                case 1 :
-                    System.out.println("Enter the element that you want to push");
-                    try{
-                        stack.push(input.nextLine());
-                    }catch(Exception e){
-                        System.out.println(e.getMessage());
-                    }
-                    break;
-                case 2 :
-                    stack.pop();
-                    System.out.println("Element has been popped");
-                    break;
-                case 3 :
-                    try{
-                        System.out.println("The top element is \"" + stack.top() + "\"");
-                    }catch(Exception e){
-                        System.out.println(e.getMessage());
-                    }
-                    break;
-                case 4 :
-                    System.out.println("Enter the index that you want to peek");
-                    int index = intInput();
-                    try{
-                        System.out.println(stack.peek(index));
-                    }catch(Exception e){
-                        System.out.println(e.getMessage());
-                    }
-                    break;
-                case 5 :
-                    System.out.println("The stack is empty: " +stack.isEmpty());
-                    break;
-                case 6 :
-                    System.out.println("The stack is full: " +stack.isFull());
-                    break;
-                case 7 :
-                    System.out.print("Enter your infix expression: ");
-                    String infixExpression = input.nextLine();
-                    infixExpression = infixExpression.replaceAll("\\s", "");
+            //try{
+                postfix = infixToPostfix(infixExpression);
 
-                    String postfix = infixToPostfix(infixExpression);
-                    System.out.println("Postfix Expression: " + postfix);
-                    System.out.println("Result = " +getResult(postfix));
-                    break;
-                case 8 :
-                    System.out.println("Terminating program");
-                    break loop;
-                default :
-                    System.out.println("Input a number from 1 to 11");
-            }
+                System.out.println("Postfix expression: ");
+                for(int i = 0; i < postfix.getSize(); i++){
+                    if(postfix.peek(i) == null) continue;
+                    System.out.println(postfix.peek(i));
+                }
+
+                System.out.println();
+                System.out.println("Result = " + evaluatePostfix(postfix));
+
+           // }catch(Exception e){
+            //    System.out.println(e.getMessage());
+            //}
+
             System.out.println();
+            loop2:
+            while(true){
+                System.out.println("Do you want to try again?(Type 1 for yes, type 2 for no)");
+                int choice = intInput();
+                switch (choice) {
+                    case 1:
+                        break loop2;
+                    case 2:
+                        break loop;
+                    default:
+                        System.out.println("Invalid input, try again");
+                }
+            }
         }
+        System.out.println("Terminating program");
     }
 
-    public static boolean isValidInfixExpression(String expression) {
-        Stack stack = new Stack(100);
+    public static String addMultiply(String infix){
+        StringBuilder str = new StringBuilder();
+        for(int i = 0; i < infix.length(); i++){
+            str.append(infix.charAt(i));
+            if(i != infix.length()-1 && Character.isDigit(infix.charAt(i)) && infix.charAt(i+1) == '(') str.append("*");
+        }
+        return str.toString();
+    }
 
-        for (char c : expression.toCharArray()) {
-            if (c == '(' || c == '{' || c == '[') {
-                stack.push(Character.toString(c));
-            } else if (c == ')' || c == '}' || c == ']') {
-                if (stack.isEmpty() || !isMatchingPair(stack.pop().charAt(0), c)) {
-                    return false; // Mismatched parentheses
+    public static double evaluatePostfix(Stack expression) {
+        Stack stack = new Stack(expression.getSize());
+
+        for (int i = 0; i < expression.getSize(); i++) {
+            String s = expression.peek(i);
+            if (isParsable(s)) {
+                stack.push(s);
+            } else if(expression.peek(i) != null){
+                double operand2 = Double.parseDouble(stack.pop());
+                double operand1 = Double.parseDouble(stack.pop());
+
+                switch (s.charAt(0)) {
+                    case '+':
+                        stack.push(Double.toString(operand1 + operand2));
+                        break;
+                    case '-':
+                        stack.push(Double.toString(operand1 - operand2));
+                        break;
+                    case '*':
+                        stack.push(Double.toString(operand1 * operand2));
+                        break;
+                    case '/':
+                        stack.push(Double.toString(operand1 / operand2));
+                        break;
+                    case '^':
+                        stack.push(Double.toString(Math.pow(operand1 , operand2)));
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Invalid operator: " + s);
                 }
             }
         }
 
-        return stack.isEmpty(); // Expression is valid if the stack is empty at the end
+        return Double.parseDouble(stack.pop());
     }
 
-    private static boolean isMatchingPair(char opening, char closing) {
-        return (opening == '(' && closing == ')') ||
-                (opening == '{' && closing == '}') ||
-                (opening == '[' && closing == ']');
-    }
-
-    public static String getResult(String expression){
-        return "";
-    }
-    public static String infixToPostfix(String expression) {
-        StringBuilder result = new StringBuilder();
+    public static Stack infixToPostfix(String expression) throws Exception {
+        String infix = addMultiply(expression);
+        Stack postfix = new Stack(infix.length());
         Stack stack = new Stack(100);
-        for (char c : expression.toCharArray()) {
-            if (Character.isLetterOrDigit(c)) {
-                result.append(c);
-            } else if (c == '(') {
-                stack.push(Character.toString(c));
-            } else if (c == ')') {
+        for (int i = 0; i < infix.length(); i++) {
+            if (Character.isDigit(infix.charAt(i))) { //this chunk of code is for pushing multidigit numbers into the stack
+                if(i != infix.length()-1 && Character.isDigit(infix.charAt(i+1))) continue;
+                for(int j = i; j >= 0; j--){
+                    if( j == 0 || !Character.isDigit(infix.charAt(j-1))){
+                        postfix.push(infix.substring(j, i+1));
+                        break;
+                    }
+                }
+            } else if (infix.charAt(i) == '(') { //this chunk of code is for pushing an opening parenthesis into the stack
+                //if(Character.isDigit(expression.charAt(i-1)) || expression.charAt(i-1) == '(' || expression.charAt(i-1) == ')') stack.push("*");
+                stack.push(Character.toString(infix.charAt(i)));
+            } else if (infix.charAt(i) == ')') { //this chunk of code is for pushing a closing parenthesis into the stack
                 while (!stack.isEmpty() && !stack.top().equals("(")) {
-                    result.append(stack.pop());
+                    postfix.push(stack.pop());
                 }
                 if (!stack.isEmpty() && !stack.top().equals("(")) {
-                    return "Invalid Expression";
+                    throw new Exception("Invalid Expression");
                 } else {
                     stack.pop();
                 }
-            } else {
-                while (!stack.isEmpty() && precedence(Character.toString(c)) <= precedence(stack.top())) {
-                    result.append(stack.pop());
+            } else { //this chunk of code is for the operator precedence
+                while (!stack.isEmpty() && precedence(Character.toString(infix.charAt(i))) <= precedence(stack.top())) {
+                    postfix.push(stack.pop());
                 }
-                stack.push(Character.toString(c));
+                stack.push(Character.toString(infix.charAt(i)));
             }
         }
         while (!stack.isEmpty()) {
             if (stack.top().equals("(")) {
-                return "Invalid Expression";
+                throw new Exception("Invalid Expression");
             }
-            result.append(stack.pop());
+            postfix.push(stack.pop());
         }
-        return result.toString();
+        return postfix;
     }
 
     static boolean isParsable(String value) throws NumberFormatException{
