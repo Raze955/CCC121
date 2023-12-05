@@ -2,24 +2,57 @@ import java.util.Arrays;
 
 public class Sort {
 
-    public static void insertion(int []obj){
+
+    public static int[] bubble(int []obj){
+        int[] arr = obj.clone();
         int n = obj.length;
+        int i, j, temp;
+        boolean swapped;
+        for (i = 0; i < n - 1; i++) {
+            swapped = false;
+            for (j = 0; j < n - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+
+                    // Swap arr[j] and arr[j+1]
+                    temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                    swapped = true;
+                }
+            }
+
+            // If no two elements were
+            // swapped by inner loop, then break
+            if (!swapped)
+                break;
+        }
+
+        return arr;
+    }
+    public static int[] insertion(int []obj){
+        int[] sorted = obj.clone();
+
+        int n = sorted.length;
         for (int i = 1; i < n; ++i) {
-            int key = obj[i];
+            int key = sorted[i];
             int j = i - 1;
 
-            /* Move elements of obj[0..i-1], that are
+            /* Move elements of sorted[0..i-1], that are
                greater than key, to one position ahead
                of their current position */
-            while (j >= 0 && obj[j] > key) {
-                obj[j + 1] = obj[j];
+            while (j >= 0 && sorted[j] > key) {
+                sorted[j + 1] = sorted[j];
                 j = j - 1;
             }
-            obj[j + 1] = key;
+            sorted[j + 1] = key;
         }
+
+        return sorted;
     }
 
-    public static void merge(int []obj){
+    public static int[] merge(int []obj){
+        int[] sorted = obj.clone();
+
         class Merge{
             // Merges two subarrays of arr[].
             // First subarray is arr[l..m]
@@ -91,11 +124,13 @@ public class Sort {
                 }
             }
         }
-        Merge.sort(obj,0, obj.length-1);
+        Merge.sort(sorted,0, sorted.length-1);
+        return sorted;
     }
 
-    public static void selection(int[] obj){
-        int n = obj.length;
+    public static int[] selection(int[] obj){
+        int[] sorted = obj.clone();
+        int n = sorted.length;
 
         // One by one move boundary of unsorted subarray
         for (int i = 0; i < n-1; i++)
@@ -103,18 +138,20 @@ public class Sort {
             // Find the minimum element in unsorted array
             int min_idx = i;
             for (int j = i+1; j < n; j++)
-                if (obj[j] < obj[min_idx])
+                if (sorted[j] < sorted[min_idx])
                     min_idx = j;
 
             // Swap the found minimum element with the first
             // element
-            int temp = obj[min_idx];
-            obj[min_idx] = obj[i];
-            obj[i] = temp;
+            int temp = sorted[min_idx];
+            sorted[min_idx] = sorted[i];
+            sorted[i] = temp;
         }
+        return sorted;
     }
 
-    public static void quick(int[] obj){
+    public static int[] quick(int[] obj){
+        int[] sorted = obj.clone();
         class Quick{
             // A utility function to swap two elements
             static void swap(int[] arr, int i, int j)
@@ -170,10 +207,12 @@ public class Sort {
                 }
             }
         }
-        Quick.quickSort(obj, 0, obj.length-1);
+        Quick.quickSort(sorted, 0, sorted.length-1);
+        return sorted;
     }
 
-    public static void heap(int[] obj){
+    public static int[] heap(int[] obj){
+        int[] sorted = obj.clone();
         class HeapSort {
             public static void sort(int[] arr) {
                 int N = arr.length;
@@ -220,10 +259,12 @@ public class Sort {
                 }
             }
         }
-        HeapSort.sort(obj);
+        HeapSort.sort(sorted);
+        return sorted;
     }
 
-    public static void radix(int[] obj){
+    public static int[] radix(int[] obj){
+        int[] sorted = obj.clone();
         class Radix {
 
             // A utility function to get maximum value in arr[]
@@ -278,7 +319,8 @@ public class Sort {
                     countSort(arr, n, exp);
             }
         }
-        Radix.radixSort(obj, obj.length);
+        Radix.radixSort(sorted, sorted.length);
+        return sorted;
     }
 
 }
