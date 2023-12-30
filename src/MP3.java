@@ -26,6 +26,8 @@ NAME: Lluch, Josiah Raziel S.
         will be directly outputted.
         */
 
+import data_structures.Stack;
+
 import java.util.Scanner;
 
 public class MP3 {
@@ -35,12 +37,18 @@ public class MP3 {
 
     private static int precedence(String c) {
         switch (c) {
-            case "+": return 1;
-            case "-": return 1;
-            case "*": return 2;
-            case "/": return 2;
-            case "^": return 3;
-            default: return -1;
+            case "+", "-" -> {
+                return 1;
+            }
+            case "*", "/" -> {
+                return 2;
+            }
+            case "^" -> {
+                return 3;
+            }
+            default -> {
+                return -1;
+            }
         }
     }
 
@@ -104,7 +112,7 @@ public class MP3 {
 
         for (int i = 0; i < expression.getSize(); i++) {
             String s = expression.peek(i);
-            if (isParsable(s)) {
+            if (isParseable(s)) {
                 stack.push(s);
             } else if(expression.peek(i) != null){
                 double operand2 = Double.parseDouble(stack.pop());
@@ -140,7 +148,7 @@ public class MP3 {
         Stack postfix = new Stack(infix.length());
         Stack stack = new Stack(100);
         for (int i = 0; i < infix.length(); i++) {
-            if (Character.isDigit(infix.charAt(i))) { //this chunk of code is for pushing multidigit numbers into the stack
+            if (Character.isDigit(infix.charAt(i))) { //this chunk of code is for pushing multi-digit numbers into the stack
                 if(i != infix.length()-1 && Character.isDigit(infix.charAt(i+1))) continue;
                 for(int j = i; j >= 0; j--){
                     if( j == 0 || !Character.isDigit(infix.charAt(j-1))){
@@ -176,7 +184,7 @@ public class MP3 {
         return postfix;
     }
 
-    static boolean isParsable(String value) throws NumberFormatException{
+    static boolean isParseable(String value) throws NumberFormatException{
         try{
             Integer.parseInt(value);
             return true;
@@ -188,7 +196,7 @@ public class MP3 {
     static int intInput() throws NumberFormatException{
 
         String temp = input.nextLine();
-        if(!isParsable(temp))throw new NumberFormatException("\n!!You inputted a STRING, please input an integer!!");
+        if(!isParseable(temp))throw new NumberFormatException("\n!!You inputted a STRING, please input an integer!!");
         else return Integer.parseInt(temp);
     }
 

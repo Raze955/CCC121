@@ -1,14 +1,15 @@
+package data_structures;
+
 public class Queue {
 
-    private int queue[];
+    private final int[] queue;
     private int front;
     private int rear;
-    final private int size;
     public int temp;
     Queue(int size){
         queue = new int[size];
         setEmptyPointer();
-        this.size = size-1;
+        int size1 = size - 1;
     }
 
     private int getLength(){

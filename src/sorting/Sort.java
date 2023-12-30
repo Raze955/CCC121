@@ -1,9 +1,11 @@
+package sorting;
+
 import java.util.Arrays;
 
 public class Sort {
 
 
-    public static int[] bubble(int []obj){
+    public static void bubble(int []obj){
         int[] arr = obj.clone();
         int n = obj.length;
         int i, j, temp;
@@ -27,9 +29,8 @@ public class Sort {
                 break;
         }
 
-        return arr;
     }
-    public static int[] insertion(int []obj){
+    public static void insertion(int []obj){
         int[] sorted = obj.clone();
 
         int n = sorted.length;
@@ -47,10 +48,9 @@ public class Sort {
             sorted[j + 1] = key;
         }
 
-        return sorted;
     }
 
-    public static int[] merge(int []obj){
+    public static void merge(int []obj){
         int[] sorted = obj.clone();
 
         class Merge{
@@ -68,7 +68,7 @@ public class Sort {
                 int[] R = new int[n2];
 
                 // Copy data to temp arrays
-                System.arraycopy(arr, l + 0, L, 0, n1);
+                System.arraycopy(arr, l, L, 0, n1);
                 for (int j = 0; j < n2; ++j)
                     R[j] = arr[m + 1 + j];
 
@@ -106,7 +106,7 @@ public class Sort {
                 }
             }
 
-            // Main function that sorts arr[l..r] using
+            // data_structures.Main function that sorts arr[l..r] using
             // merge()
             static void sort(int[] arr, int l, int r)
             {
@@ -115,7 +115,7 @@ public class Sort {
                     // Find the middle point
                     int m = l + (r - l) / 2;
 
-                    // Sort first and second halves
+                    // sorting.Sort first and second halves
                     sort(arr, l, m);
                     sort(arr, m + 1, r);
 
@@ -125,10 +125,9 @@ public class Sort {
             }
         }
         Merge.sort(sorted,0, sorted.length-1);
-        return sorted;
     }
 
-    public static int[] selection(int[] obj){
+    public static void selection(int[] obj){
         int[] sorted = obj.clone();
         int n = sorted.length;
 
@@ -147,10 +146,9 @@ public class Sort {
             sorted[min_idx] = sorted[i];
             sorted[i] = temp;
         }
-        return sorted;
     }
 
-    public static int[] quick(int[] obj){
+    public static void quick(int[] obj){
         int[] sorted = obj.clone();
         class Quick{
             // A utility function to swap two elements
@@ -189,7 +187,7 @@ public class Sort {
             }
 
             // The main function that implements QuickSort
-            // arr[] --> Array to be sorted,
+            // arr[] --> data_structures.Array to be sorted,
             // low --> Starting index,
             // high --> Ending index
             static void quickSort(int[] arr, int low, int high)
@@ -208,10 +206,9 @@ public class Sort {
             }
         }
         Quick.quickSort(sorted, 0, sorted.length-1);
-        return sorted;
     }
 
-    public static int[] heap(int[] obj){
+    public static void heap(int[] obj){
         int[] sorted = obj.clone();
         class HeapSort {
             public static void sort(int[] arr) {
@@ -260,10 +257,9 @@ public class Sort {
             }
         }
         HeapSort.sort(sorted);
-        return sorted;
     }
 
-    public static int[] radix(int[] obj){
+    public static void radix(int[] obj){
         int[] sorted = obj.clone();
         class Radix {
 
@@ -307,7 +303,7 @@ public class Sort {
             }
 
             // The main function to that sorts arr[] of
-            // size n using Radix Sort
+            // size n using Radix sorting.Sort
             static void radixSort(int[] arr, int n) {
                 // Find the maximum number to know number of digits
                 int m = getMax(arr, n);
@@ -320,7 +316,6 @@ public class Sort {
             }
         }
         Radix.radixSort(sorted, sorted.length);
-        return sorted;
     }
 
 }

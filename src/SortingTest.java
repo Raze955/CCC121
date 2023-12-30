@@ -1,3 +1,5 @@
+import sorting.Sort;
+
 import java.util.Random;
 import java.util.Scanner;
 
@@ -17,22 +19,22 @@ public class SortingTest {
         //System.out.println("Original list");
         //printList(random);
         //System.out.println("sorted list");
-/*        int[] insertionSort = Sort.insertion(random);
+/*        int[] insertionSort = sorting.Sort.insertion(random);
 //        printList(insertionSort);
 //        printList(random);
-        int[] mergeSort = Sort.merge(random);
+        int[] mergeSort = sorting.Sort.merge(random);
 //        printList(mergeSort);
 //        printList(random);
-        int[] selectionSort = Sort.selection(random);
+        int[] selectionSort = sorting.Sort.selection(random);
 //        printList(selectionSort);
 //        printList(random);
-        int[] quickSort = Sort.quick(random);
+        int[] quickSort = sorting.Sort.quick(random);
 //        printList(quickSort);
 //        printList(random);
-        int[] heapSort = Sort.heap(random);
+        int[] heapSort = sorting.Sort.heap(random);
 //        printList(heapSort);
 //        printList(random);
-        int[] radixSort = Sort.radix(random);
+        int[] radixSort = sorting.Sort.radix(random);
 //        printList(radixSort);
 //        printList(random);*/
 
